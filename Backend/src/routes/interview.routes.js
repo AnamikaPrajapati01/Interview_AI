@@ -1,11 +1,10 @@
-const express = require("express")
-const authMiddleware = require("../middlewares/auth.middleware")
-const interviewController = require("../controllers/interview.controller")
-const upload = require("../middlewares/file.middleware")
+import express from "express"
+import authMiddleware from "../middleware/auth.middleware"
+import interviewController from "../controllers/interview.controller"
+import upload from "../middleware/file.middleware"
+
 
 const interviewRouter = express.Router()
-
-
 
 
 interviewRouter.post("/", authMiddleware.authUser, upload.single("resume"), interviewController.generateInterViewReportController)
@@ -21,4 +20,4 @@ interviewRouter.post("/resume/pdf/:interviewReportId", authMiddleware.authUser, 
 
 
 
-module.exports = interviewRouter
+export default interviewRouter;
