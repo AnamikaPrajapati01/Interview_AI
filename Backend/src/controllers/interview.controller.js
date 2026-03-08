@@ -1,10 +1,13 @@
-import pdfParse from 'pdf-parse'
-import {generateInterviewReport, generateResumePdf} from '../services/ai.services'
-import interviewReportModel from '../models/interviewReport.model'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const pdfParse = require('pdf-parse')
+import aiServices from '../services/ai.services.js'
+const { generateInterviewReport, generateResumePdf } = aiServices
+import interviewReportModel from '../models/interviewReport.model.js'
 
 async function generateInterViewReportController(req, res) {
 
-    const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
+    const resumeContent = await pdfParse(req.file.buffer)
     const { selfDescription, jobDescription } = req.body
 
     const interViewReportByAi = await generateInterviewReport({

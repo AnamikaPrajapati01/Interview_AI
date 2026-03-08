@@ -5,14 +5,14 @@ import puppeteer from "puppeteer"
 
 
 const ai = new GoogleGenAI({
-    apiKey:process.env.GOOGLE_GENAI_API_KEY
+    apiKey: process.env.GOOGLE_GENAI_API_KEY
 });
 
 
 
 
 const interviewReportSchema = z.object({
- matchScore: z.number().describe("A score between 0 and 100 indicating how well the candidate's profile matches the job describe"),
+    matchScore: z.number().describe("A score between 0 and 100 indicating how well the candidate's profile matches the job describe"),
     technicalQuestions: z.array(z.object({
         question: z.string().describe("The technical question can be asked in the interview"),
         intention: z.string().describe("The intention of interviewer behind asking this question"),
@@ -25,7 +25,7 @@ const interviewReportSchema = z.object({
     })).describe("Behavioral questions that can be asked in the interview along with their intention and how to answer them"),
     skillGaps: z.array(z.object({
         skill: z.string().describe("The skill which the candidate is lacking"),
-        severity: z.enum([ "low", "medium", "high" ]).describe("The severity of this skill gap, i.e. how important is this skill for the job and how much it can impact the candidate's chances")
+        severity: z.enum(["low", "medium", "high"]).describe("The severity of this skill gap, i.e. how important is this skill for the job and how much it can impact the candidate's chances")
     })).describe("List of skill gaps in the candidate's profile along with their severity"),
     preparationPlan: z.array(z.object({
         day: z.number().describe("The day number in the preparation plan, starting from 1"),
@@ -35,7 +35,7 @@ const interviewReportSchema = z.object({
     title: z.string().describe("The title of the job for which the interview report is generated"),
 })
 
-async function generateInterviewReport({resume,selfdescription,jobDescription}){
+async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
 
 
     const prompt = `Generate an interview report for a candidate with the following details:
@@ -45,7 +45,7 @@ async function generateInterviewReport({resume,selfdescription,jobDescription}){
 `
 
     const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: prompt,
         config: {
             responseMimeType: "application/json",
@@ -79,11 +79,11 @@ async function generatePdfFromHtml(htmlContent) {
 }
 
 
-async function generateResumePdf({resume, selfDescription, jobDescription}) {
+async function generateResumePdf({ resume, selfDescription, jobDescription }) {
     const resumePdfSchema = z.object({
-        html:z.string().describe("The HTML content of the resume which can be converted to PDF using any library like puppeteer")
-    })   
-    
+        html: z.string().describe("The HTML content of the resume which can be converted to PDF using any library like puppeteer")
+    })
+
     const promt = `Generate resume for a candidate with the following details:
         resume:${resume}
         self Description:${selfDescription}
@@ -97,11 +97,11 @@ async function generateResumePdf({resume, selfDescription, jobDescription}) {
     `
 
     const response = await ai.models.generateContent({
-        model:"gemini-3-flash-preview",
-        contents:promt,
-        config:{
-            responseMimeType:"application/json",
-            responseSchema:zodToJsonSchema(resumePdfSchema),
+        model: "gemini-1.5-flash",
+        contents: promt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: zodToJsonSchema(resumePdfSchema),
         }
     })
 
@@ -113,4 +113,4 @@ async function generateResumePdf({resume, selfDescription, jobDescription}) {
 }
 
 
-export default {generateInterviewReport, generateResumePdf}
+export default { generateInterviewReport, generateResumePdf }

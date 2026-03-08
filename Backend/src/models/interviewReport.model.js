@@ -99,4 +99,5 @@ const interviewReportSchema = new mongoose.Schema({
 
 const interviewReportModel = mongoose.model("InterviewReport", interviewReportSchema);
 
-export defult interviewReportModel;
+
+export default interviewReportModel;
