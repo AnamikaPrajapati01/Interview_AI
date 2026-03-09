@@ -6,29 +6,37 @@ const { generateInterviewReport, generateResumePdf } = aiServices
 import interviewReportModel from '../models/interviewReport.model.js'
 
 async function generateInterViewReportController(req, res) {
+    try {
+        let resumeText = "";
+        if (req.file) {
+            const resumeContent = await pdfParse(req.file.buffer);
+            resumeText = resumeContent.text;
+        }
 
-    const resumeContent = await pdfParse(req.file.buffer)
-    const { selfDescription, jobDescription } = req.body
+        const { selfDescription, jobDescription } = req.body;
 
-    const interViewReportByAi = await generateInterviewReport({
-        resume: resumeContent.text,
-        selfDescription,
-        jobDescription
-    })
+        const interViewReportByAi = await generateInterviewReport({
+            resume: resumeText,
+            selfDescription,
+            jobDescription
+        });
 
-    const interviewReport = await interviewReportModel.create({
-        user: req.user.id,
-        resume: resumeContent.text,
-        selfDescription,
-        jobDescription,
-        ...interViewReportByAi
-    })
+        const interviewReport = await interviewReportModel.create({
+            user: req.user.id,
+            resume: resumeText,
+            selfDescription,
+            jobDescription,
+            ...interViewReportByAi
+        });
 
-    res.status(201).json({
-        message: "Interview report generated successfully.",
-        interviewReport
-    })
-
+        res.status(201).json({
+            message: "Interview report generated successfully.",
+            interviewReport
+        });
+    } catch (error) {
+        console.error("Error generating report:", error);
+        res.status(500).json({ error: error.message || "Internal Server Error" });
+    }
 }
 
 async function getInterviewReportByIdController(req, res) {

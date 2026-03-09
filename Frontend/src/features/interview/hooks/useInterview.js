@@ -22,7 +22,8 @@ export const useInterview = () => {
             setReport(response.interviewReport)
             return response.interviewReport
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            throw error;
         } finally {
             setLoading(false)
         }
@@ -35,7 +36,8 @@ export const useInterview = () => {
             setReport(response.interviewReport)
             return response.interviewReport
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            throw error;
         } finally {
             setLoading(false)
         }
@@ -48,7 +50,8 @@ export const useInterview = () => {
             setReports(response.interviewReports)
             return response.interviewReports
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            throw error;
         } finally {
             setLoading(false)
         }
@@ -65,9 +68,9 @@ export const useInterview = () => {
             link.setAttribute("download", `resume_${interviewReportId}.pdf`)
             document.body.appendChild(link)
             link.click()
-        }
-        catch (error) {
-            console.log(error)
+        } catch (error) {
+            console.log(error);
+            throw error;
         } finally {
             setLoading(false)
         }
