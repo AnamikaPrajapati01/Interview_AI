@@ -108,6 +108,34 @@ $severity-low: #3fb950;
         align-items: center;
         flex-shrink: 0;
     }
+
+    &__back {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        width: 100%;
+        padding: 0.55rem 0.75rem;
+        background: none;
+        border: 1px solid $border-color;
+        border-radius: 0.5rem;
+        color: $text-muted;
+        font-family: $font-stack;
+        font-size: 0.85rem;
+        cursor: pointer;
+        text-align: left;
+        margin-bottom: 1rem;
+        transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+
+        &:hover {
+            background-color: $bg-panel;
+            color: $text-primary;
+            border-color: lighten($border-color, 8%);
+        }
+
+        svg {
+            flex-shrink: 0;
+        }
+    }
 }
 
 // ── Center Content ────────────────────────────────────────────────────────────
